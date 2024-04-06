@@ -36,7 +36,6 @@ def createEnemies():
         y -= 50
 
 #Added by Mikael
-#All the enemies fuck off to the left at the moment, never to be seen again
 def moveEnemies():
     global ENEMY_SPEED
     s.setPenColor(s.RED)
