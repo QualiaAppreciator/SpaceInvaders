@@ -2,14 +2,15 @@ import stddraw as s
 import stdio
 import functions as f
 import random
-import stdarray
 import time 
 import math
+
 ######################################################################
 # GLOBAL VARIABLES DECLARED HERE 
 RADIUS = 20
-ENEMIES_HEALTH = stdarray.create2D(3,5,1)
+ENEMIES = []
 MISSILES = []
+ENEMY_SPEED = 0.15
 ######################################################################
 
 def main():
@@ -20,6 +21,8 @@ def main():
 
     menu = True
     overall = True
+
+    f.createEnemies()
 
     while overall == True:
 
@@ -75,11 +78,11 @@ def main():
             
             s.clear(s.BLACK)
             
-            f.enemies(ENEMIES_HEALTH)
+            f.moveEnemies()
             s.setPenColor(s.GREEN)
             s.filledCircle(rx,20,RADIUS)
             f.drawCannon(rx,theta)
-            f.missile(rx,theta,MISSILES,key)
+            f.missile(rx,theta,key)
             s.show(1)
 
     s.clear(s.BLACK)
