@@ -10,8 +10,10 @@ import math
 RADIUS = 20
 ENEMIES = []
 MISSILES = []
-ENEMY_SPEED = 0.15
-######################################################################
+ENEMY_SPEED = 0.08
+HIGHSCORE = 0
+LAST_MISSILE_FIRED_TIME = -1
+#####################################################################
 
 def main():
 
@@ -83,12 +85,18 @@ def main():
             s.filledCircle(rx,20,RADIUS)
             f.drawCannon(rx,theta)
             f.missile(rx,theta,key)
+
+            gameStatus = f.checkGameStatus(rx)
+            if gameStatus == "Lost" or gameStatus == "Won":
+                overall = False
+                game_play = False
+
             s.show(1)
+
 
     s.clear(s.BLACK)
     s.setPenColor(s.WHITE)
     s.text(0,250,"Thanks for playing")
-    s.show(0)
-    time.sleep(3)
+    s.show()
 
 if __name__ == '__main__': main()
