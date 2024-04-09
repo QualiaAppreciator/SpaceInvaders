@@ -33,11 +33,7 @@ def main():
         s.setPenColor(s.BLACK)
 
         while menu == True:
-            s.clear(s.WHITE)
-            s.text(0,250,"Press p to play")
-            s.text(0,238,"Press e to come back")
-            s.text(0,226,"Press q to quit")
-            s.show(1)
+            f.drawMenu()
 
             key = s.getKeysPressed()
 

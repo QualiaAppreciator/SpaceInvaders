@@ -13,6 +13,13 @@ MISSILE_SPEED = 0.2
 
 
 
+def drawMenu():
+    s.clear(s.GRAY)
+    s.text(0,250,"Press p to play")
+    s.text(0,238,"Press e to come back")
+    s.text(0,226,"Press q to quit")
+    s.show(1)
+
 def movePlayer(keyTyped, RX):
    
     if keyTyped == 'a' or keyTyped == 'A':
@@ -48,13 +55,16 @@ def createEnemies():
 def moveEnemies():
     global ENEMY_SPEED
     s.setPenColor(s.RED)
+    direction_changed = False
 
     #Switches direction of enemy movement and moves them down when touching a border
     for m in range(15):
         if ((ENEMIES[m][0]-RADIUS <= -250) or (ENEMIES[m][0]+RADIUS >= 250)) and (ENEMIES[m][2] == 1):
+            if not direction_changed:
+                ENEMY_SPEED *= -1
+            direction_changed = True
             for n in range(15):
-                ENEMIES[n][1] -= 12
-            ENEMY_SPEED *= -1
+                ENEMIES[n][1] -= 14
 
     #Checks status of enemies, draws them if alive, kills them if in contact with a missile.
     #Moves enemies horizontally
@@ -63,11 +73,15 @@ def moveEnemies():
         y = ENEMIES[j][1]
 
         #Enemies have square hitboxes at the moment, dunno if that matters too much. Can maybe change their shape later on so that it is less obvious.
-        k = 1
+        k = 0
         while k < len(MISSILES):
             if (MISSILES[k][0] > x-RADIUS and MISSILES[k][0] < x+RADIUS) and (MISSILES[k][1] > y-RADIUS and MISSILES[k][1] < y+RADIUS) and (ENEMIES[j][2] == 1):
                 ENEMIES[j][2] = 0
                 del MISSILES[k]
+                if ENEMY_SPEED > 0:
+                    ENEMY_SPEED += 0.03
+                else:
+                    ENEMY_SPEED -= 0.03
             else:
                 k += 1
 
@@ -106,7 +120,7 @@ def missile(RX, theta, keyTyped):
     global LAST_MISSILE_FIRED_TIME
     s.setPenColor(s.WHITE)
 
-    #Creates new missile when SPACE is pressed.       
+    #Creates new missile when SPACE is pressed with a time interval of one second.
     CURRENT_TIME = time.time()
     if keyTyped == ' ' and CURRENT_TIME - LAST_MISSILE_FIRED_TIME >= 1:
         MISSILES.append([RX, 20, theta])
@@ -135,8 +149,10 @@ def missile(RX, theta, keyTyped):
 #Returns "Won" if all enemies have been killed
 def checkGameStatus(RX):
     living_enemies = 0
-    
+
     for i in range(15):
+        #This if equation can be simplified, I left it like this to show my reasoning,
+        #because there are some bugs with the end-game conditions.
         if (ENEMIES[i][1]-RADIUS <= 40 and ((ENEMIES[i][0]-RADIUS <= RX+RADIUS and ENEMIES[i][0]-RADIUS >= RX-RADIUS)\
              or (ENEMIES[i][0]+RADIUS <= RX+RADIUS and ENEMIES[i][0]+RADIUS >= RX-RADIUS)))\
              or ENEMIES[i][1]-RADIUS <= 0:
