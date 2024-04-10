@@ -42,6 +42,8 @@ def main():
             elif key[s.K_q]:
                 overall = False
                 menu = False
+            elif key[s.K_i]:
+                f.drawInstructions()
 
         if overall == False:
             game_play = False
