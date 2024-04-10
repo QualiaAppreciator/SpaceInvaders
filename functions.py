@@ -22,6 +22,7 @@ def drawMenu():
     
 # instructions menu accesed from the main menu
 # added by JOSH
+# maybe a better looking insturction set can be displayed with a picture??
 def drawInstructions():
     instructions = True 
     while instructions:
