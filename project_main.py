@@ -42,7 +42,7 @@ def main():
             elif key[s.K_q]:
                 overall = False
                 menu = False
-            elif key[s.K_i]:
+            elif key[s.K_i]: #instructions option
                 f.drawInstructions()
 
         if overall == False:
