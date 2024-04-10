@@ -19,7 +19,24 @@ def drawMenu():
     s.text(0,238,"Press e to come back")
     s.text(0,226,"Press q to quit")
     s.show(1)
-
+    
+# instructions menu accesed from the main menu
+# added by JOSH
+def drawInstructions():
+    instructions = True 
+    while instructions:
+        s.clear(s.GRAY)
+        Quit = s.getKeysPressed()
+        if Quit[s.K_b]:
+            instructions = False
+        s.text(0,275,"To move left press: ' a '")
+        s.text(0,260,"To move right press: ' d '")
+        s.text(0,245,"To shift the canon angle left press: ' j '")
+        s.text(0,230,"To shift the canon angle right press: ' l '")
+        s.text(0,215,"To shoot press: SPACE BAR")
+        s.text(0,200,"Press ' b ' to return to the main menu")
+        s.show(1)
+        
 def movePlayer(keyTyped, RX):
    
     if keyTyped == 'a' or keyTyped == 'A':
