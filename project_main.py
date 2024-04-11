@@ -4,7 +4,7 @@ import functions as f
 import random
 import time 
 import math
-
+from picture import Picture
 ######################################################################
 # GLOBAL VARIABLES DECLARED HERE 
 RADIUS = 20
@@ -13,6 +13,7 @@ MISSILES = []
 ENEMY_SPEED = 0.08
 HIGHSCORE = 0
 LAST_MISSILE_FIRED_TIME = -1
+BACKGROUND = Picture('background.PNG')
 #####################################################################
 
 def main():
@@ -77,7 +78,7 @@ def main():
             theta = f.cannonAngle(key,rx,theta)
             
             s.clear(s.BLACK)
-            
+            s.picture(BACKGROUND)
             f.moveEnemies()
             s.setPenColor(s.GREEN)
             s.filledCircle(rx,20,RADIUS)
