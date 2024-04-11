@@ -3,7 +3,7 @@ import stdio
 import stddraw as s
 import math
 import time
-from project_main import ENEMY_SPEED, ENEMIES, MISSILES, RADIUS, LAST_MISSILE_FIRED_TIME
+from project_main import ENEMY_SPEED, ENEMIES, MISSILES, RADIUS, LAST_MISSILE_FIRED_TIME,BACKGROUND
 
 
 
@@ -15,6 +15,7 @@ MISSILE_SPEED = 0.2
 # added by JOSH in project_main, moved to functions by Mikael
 def drawMenu():
     s.clear(s.GRAY)
+    s.picture(BACKGROUND)
     s.text(0,250,"Press p to play")
     s.text(0,238,"Press e to come back")
     s.text(0,226,"Press q to quit")
@@ -29,6 +30,7 @@ def drawInstructions():
         Quit = s.getKeysPressed()
         if Quit[s.K_b]:
             instructions = False
+        s.picture(BACKGROUND)
         s.text(0,275,"To move left press: ' a '")
         s.text(0,260,"To move right press: ' d '")
         s.text(0,245,"To shift the canon angle left press: ' j '")
