@@ -17,8 +17,9 @@ def drawMenu():
     s.clear(s.GRAY)
     s.picture(BACKGROUND)
     s.text(0,250,"Press p to play")
-    s.text(0,238,"Press e to come back")
-    s.text(0,226,"Press q to quit")
+    s.text(0,238,"Press i for instructions")
+    s.text(0,226,"Press e to come back")
+    s.text(0,214,"Press q to quit")
     s.show(1)
     
 # instructions menu accesed from the main menu
