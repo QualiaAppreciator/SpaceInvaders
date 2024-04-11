@@ -13,7 +13,7 @@ MISSILES = []
 ENEMY_SPEED = 0.08
 HIGHSCORE = 0
 LAST_MISSILE_FIRED_TIME = -1
-BACKGROUND = Picture('background.PNG')
+BACKGROUND = Picture('background.PNG') # background picture used is from the website 'https://www.freepik.com/free-photos-vectors/space' and is not under copyright
 #####################################################################
 
 def main():
@@ -43,7 +43,7 @@ def main():
             elif key[s.K_q]:
                 overall = False
                 menu = False
-            elif key[s.K_i]: #instructions option
+            elif key[s.K_i]: #instructions option, added by Josh
                 f.drawInstructions()
 
         if overall == False:
