@@ -12,7 +12,7 @@ ANGULAR_SPEED = 0.01
 MISSILE_SPEED = 0.2
 
 
-
+# added by JOSH in project_main, moved to functions by Mikael
 def drawMenu():
     s.clear(s.GRAY)
     s.text(0,250,"Press p to play")
@@ -21,8 +21,7 @@ def drawMenu():
     s.show(1)
     
 # instructions menu accesed from the main menu
-# added by JOSH
-# maybe a better looking insturction set can be displayed with a picture??
+# added by JOSH                                                                          
 def drawInstructions():
     instructions = True 
     while instructions:
@@ -38,15 +37,19 @@ def drawInstructions():
         s.text(0,200,"Press ' b ' to return to the main menu")
         s.show(1)
         
+# moves player left when 'a' is pressed and right when 'd' is pressed
+# added by josh
 def movePlayer(keyTyped, RX):
    
     if keyTyped == 'a' or keyTyped == 'A':
+        # ensures player does not cross left boarder
         if RX-RADIUS == -250:
             RX = RX
         else:
             RX -= SPEED
 
     if keyTyped == 'd' or keyTyped == 'D':
+        # ensures player does not cross right boarder 
         if RX+RADIUS == 250:
             RX = RX
         else:
@@ -109,14 +112,17 @@ def moveEnemies():
             s.filledCircle(ENEMIES[j][0],ENEMIES[j][1],RADIUS)
 
 
-
+# shifts canon angle left and right 
+# added by josh
 def cannonAngle(keyTyped,RX,theta):
     if keyTyped == 'l':
         theta += ANGULAR_SPEED
+        # ensures canon does not go past the horizontal on the left
         if theta >= math.pi:
             theta = math.pi
     if keyTyped == 'j':
         theta -= ANGULAR_SPEED
+        # ensures canon does not go past the horizontal on the right 
         if theta <= 0:
             theta = 0
     return theta
