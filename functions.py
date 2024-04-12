@@ -131,7 +131,7 @@ def cannonAngle(keyTyped,RX,theta):
     return theta
 
 
-
+# added by Josh
 def drawCannon(RX,theta):
     s.setPenColor(s.BLUE)
     s.setPenRadius(2.5)
