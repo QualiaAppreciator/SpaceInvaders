@@ -9,7 +9,7 @@ from project_main import ENEMY_SPEED, ENEMIES, MISSILES, RADIUS, LAST_MISSILE_FI
 
 SPEED = .5
 ANGULAR_SPEED = 0.01
-MISSILE_SPEED = 0.2
+MISSILE_SPEED = 0.5
 
 
 # added by JOSH in project_main, moved to functions by Mikael
