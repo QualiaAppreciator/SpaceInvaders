@@ -87,11 +87,12 @@ def main():
 
             gameStatus = f.checkGameStatus(rx)
             if gameStatus == "Lost" or gameStatus == "Won":
-                overall = False
                 game_play = False
 
             s.show(1)
 
+        if overall:
+            f.gameOver(gameStatus)
 
     s.clear(s.BLACK)
     s.setPenColor(s.WHITE)
