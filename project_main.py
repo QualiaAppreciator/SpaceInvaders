@@ -10,7 +10,7 @@ from picture import Picture
 RADIUS = 20
 ENEMIES = []
 MISSILES = []
-ENEMY_SPEED = 0.08
+ENEMY_SPEED = 0.4
 HIGHSCORE = 0
 LAST_MISSILE_FIRED_TIME = -1
 BACKGROUND = Picture('background.PNG') # background picture used is from the website 'https://www.freepik.com/free-photos-vectors/space' and is not under copyright
