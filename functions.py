@@ -39,6 +39,13 @@ def drawInstructions():
         s.text(0,215,"To shoot press: SPACE BAR")
         s.text(0,200,"Press ' b ' to return to the main menu")
         s.show(1)
+
+def gameOver(status):
+    s.picture(BACKGROUND)
+    s.text(0,250,"GAME OVER")
+    s.text(0,240,status)
+    s.show(1)
+    time.sleep(3)
         
 # moves player left when 'a' is pressed and right when 'd' is pressed
 # added by josh
