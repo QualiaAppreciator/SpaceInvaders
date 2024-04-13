@@ -10,11 +10,13 @@ from project_main import ENEMY_SPEED, ENEMIES, MISSILES, RADIUS, LAST_MISSILE_FI
 SPEED = .5
 ANGULAR_SPEED = 0.01
 MISSILE_SPEED = 0.5
+HIGHSCORE = 0
 
 
 # added by JOSH in project_main, moved to functions by Mikael
 def drawMenu():
     s.clear(s.GRAY)
+    s.setPenColor(s.WHITE)
     s.picture(BACKGROUND)
     s.text(0,250,"Press p to play")
     s.text(0,238,"Press i for instructions")
@@ -22,7 +24,7 @@ def drawMenu():
     s.text(0,214,"Press q to quit")
     s.show(1)
     
-# instructions menu accesed from the main menu
+# instructions menu accessed from the main menu
 # added by JOSH                                                                          
 def drawInstructions():
     instructions = True 
@@ -69,7 +71,7 @@ def movePlayer(keyTyped, RX):
 
 
 
-#Changed ENEMIES to a nested list, where each nested list is one enemy -> [x, y, health status]
+#Mikael changed ENEMIES to a nested list, where each nested list is one enemy -> [x, y, health status]
 #Creates enemies once off in their starting positions
 def createEnemies():
     y = 450
@@ -85,6 +87,7 @@ def createEnemies():
 #Added by Mikael
 def moveEnemies():
     global ENEMY_SPEED
+    global HIGHSCORE
     s.setPenColor(s.RED)
     direction_changed = False
 
@@ -113,6 +116,7 @@ def moveEnemies():
                     ENEMY_SPEED += 0.03
                 else:
                     ENEMY_SPEED -= 0.03
+                HIGHSCORE += 30
             else:
                 k += 1
 
@@ -122,17 +126,17 @@ def moveEnemies():
             s.filledCircle(ENEMIES[j][0],ENEMIES[j][1],RADIUS)
 
 
-# shifts canon angle left and right 
+# shifts cannon angle left and right 
 # added by josh
 def cannonAngle(keyTyped,RX,theta):
     if keyTyped == 'l':
         theta += ANGULAR_SPEED
-        # ensures canon does not go past the horizontal on the left
+        # ensures cannon does not go past the horizontal on the left
         if theta >= math.pi:
             theta = math.pi
     if keyTyped == 'j':
         theta -= ANGULAR_SPEED
-        # ensures canon does not go past the horizontal on the right 
+        # ensures cannon does not go past the horizontal on the right 
         if theta <= 0:
             theta = 0
     return theta

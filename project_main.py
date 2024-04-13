@@ -11,7 +11,6 @@ RADIUS = 20
 ENEMIES = []
 MISSILES = []
 ENEMY_SPEED = 0.4
-HIGHSCORE = 0
 LAST_MISSILE_FIRED_TIME = -1
 BACKGROUND = Picture('background.PNG') # background picture used is from the website 'https://www.freepik.com/free-photos-vectors/space' and is not under copyright
 #####################################################################
@@ -21,6 +20,7 @@ def main():
     s.setCanvasSize(500,500)
     s.setXscale(-250,250)
     s.setYscale(0,500)
+    s.setFontSize(16)
 
     menu = True
     overall = True
@@ -84,6 +84,8 @@ def main():
             s.filledCircle(rx,20,RADIUS)
             f.drawCannon(rx,theta)
             f.missile(rx,theta,key)
+
+            s.text(-210, 490, "Score = " + str(f.HIGHSCORE))
 
             gameStatus = f.checkGameStatus(rx)
             if gameStatus == "Lost" or gameStatus == "Won":
