@@ -79,13 +79,13 @@ def main():
 
             score = f.checkForHits(ENEMIES, MISSILES, score)
 
-            if levelCount > 2:
-                f.enemyCounterattack(player._x, ENEMY_MISSILES, ENEMIES)
+            #if levelCount > 2:
+            f.enemyCounterattack(player._x, ENEMY_MISSILES, ENEMIES)
 
             gameStatus = f.gameStatus(ENEMIES, player, ENEMY_MISSILES)
-            if gameStatus == 'YOU LOSE' or (gameStatus == 'YOU WIN' and levelCount == 4):
+            if gameStatus == 'LOST' or (gameStatus == 'WON' and levelCount == 4):
                 gamePlay = False
-            if gameStatus == 'YOU WIN' and levelCount < 4:
+            if gameStatus == 'WON' and levelCount < 4:
                 levelCount = f.levelDisplay(levelCount)
                 ENEMIES.clear()
                 MISSILES.clear()
@@ -96,7 +96,7 @@ def main():
         ENEMIES.clear()
         MISSILES.clear()
         if overall and not key[s.K_e]:
-            f.gameOver(gameStatus)
+            f.gameOver(levelCount, score)
 
 
 

@@ -95,23 +95,24 @@ def gameStatus(ENEMIES, player, ENEMY_MISSILES):
         if g._hitpoints != 0:
             living_enemies += 1
     if living_enemies == 0:
-        return 'YOU WIN'
+        return 'WON'
     
     for i in ENEMIES:
         if math.sqrt((player._x-i._x)**2 + (player._y-i._y)**2) <= 50:
-            return 'YOU LOSE'
+            return 'LOST'
         
     for j in ENEMY_MISSILES:
         if math.sqrt((player._x-j._x)**2+(player._y-j._y)**2) <= 35:
-            return 'YOU LOSE'
+            return 'LOST'
 
 
 
-def gameOver(status):
+def gameOver(levelCount, score):
     s.picture(BACKGROUND)
     s.setFontSize(16)
     s.text(0,250,"GAME OVER")
-    s.text(0,235,status)
+    s.text(0,235,"Final score: " + str(score))
+    s.text(0,220,"Level reached: " + str(levelCount))
     s.show(1)
     time.sleep(3)
 

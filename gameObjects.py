@@ -32,6 +32,11 @@ class Missiles:
         self._speed = 2
         self._enemy = enemy
 
+        if self._enemy == 0:
+            self._graphic = Picture("missile1.PNG")
+        else:
+            self._graphic = Picture("missile2_down.PNG")
+
     def move(self):
         if self._enemy == 0:
             if self._theta <= math.pi/2:
@@ -44,8 +49,7 @@ class Missiles:
             self._y -= 0.7*self._speed
 
     def draw(self):
-        s.setPenColor(s.WHITE)
-        s.filledCircle(self._x, self._y, 3)
+        s.picture(self._graphic, self._x, self._y)
 
 class Player:
     def __init__(self, x, y, theta, graphic):
