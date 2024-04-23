@@ -1,8 +1,9 @@
 import stddraw as s
 import math, time
 from gameObjects import Enemies
-from project_main import ENEMY_SPEED, MISSILES, BACKGROUND
+from project_main import ENEMY_SPEED, BACKGROUND
 from picture import Picture
+
 
 def setCanvas():
     s.setCanvasSize(500,500)
@@ -10,8 +11,10 @@ def setCanvas():
     s.setYscale(0,500)
     s.setFontSize(16)
 
+
+
 def drawMenu():
-    s.clear(s.BLACK)
+    s.clear()
     s.setPenColor(s.WHITE)
     s.setFontSize(16)
     s.picture(BACKGROUND)
@@ -21,22 +24,26 @@ def drawMenu():
     s.text(0,214,"Press e to come back")
     s.text(0,202,"Press q to quit")
     s.show(1)
-                                                                            
+
+
+
 def drawInstructions():
     instructions = True 
     while instructions:
-        s.clear(s.GRAY)
+        s.clear()
         Quit = s.getKeysPressed()
         if Quit[s.K_b]:
             instructions = False
         s.picture(BACKGROUND)
         s.text(0,275,"To move left press: ' a '")
         s.text(0,260,"To move right press: ' d '")
-        s.text(0,245,"To shift the canon angle left press: ' j '")
-        s.text(0,230,"To shift the canon angle right press: ' l '")
+        s.text(0,245,"To shift the cannon angle left press: ' j '")
+        s.text(0,230,"To shift the cannon angle right press: ' l '")
         s.text(0,215,"To shoot press: SPACE BAR")
         s.text(0,200,"Press ' b ' to return to the main menu")
         s.show(1)
+
+
 
 def populateENEMIES(ENEMIES):
     y = 450
@@ -47,10 +54,12 @@ def populateENEMIES(ENEMIES):
             x += 50
         y -= 50
 
+
+
 def checkForHits(ENEMIES, MISSILES, highscore):
     for i in ENEMIES:
         for j in MISSILES:
-            if math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) - 3 - 15 <= 0:
+            if math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) - 18 <= 0:
                 ENEMIES.remove(i)
                 MISSILES.remove(j)
                 highscore += 30
@@ -60,12 +69,16 @@ def checkForHits(ENEMIES, MISSILES, highscore):
 
     return highscore
 
+
+
 def gameStatus(ENEMIES, player):
     if len(ENEMIES) == 0:
         return 'YOU WIN'
     for i in ENEMIES:
-        if math.sqrt((player._x-i._x)**2+(player._y-i._y)**2) - 5 <= 0:
+        if math.sqrt((player._x-i._x)**2 + (player._y-i._y)**2) <= 50:
             return 'YOU LOSE'
+
+
 
 def gameOver(status):
     s.picture(BACKGROUND)
@@ -75,10 +88,14 @@ def gameOver(status):
     s.show(1)
     time.sleep(3)
 
+
+
 def score(score):
     s.setPenColor(s.WHITE)
     s.setFontSize(16)
     s.text(-210,490,"score = " + str(score))
+
+
 
 def levelDisplay(levelCount):
     currentTime = time.time()
@@ -90,18 +107,23 @@ def levelDisplay(levelCount):
         s.show(1)
     return levelCount + 1
 
+
+
 def playerChoice():
     choice = True
+    s.picture(BACKGROUND)
+    s.setFontSize(26)
+    s.text(0,320,"Choose your character")
+    s.picture(Picture('player1.PNG'),-50, 250)
+    s.picture(Picture('player2.PNG'),50, 250)
+    s.setFontSize(20)
+    s.text(-50, 200, "1")
+    s.text(50, 200, "2")
+
     while choice:
-        s.picture(BACKGROUND)
-        s.text(0,300,"Choose your character")
-        s.picture(Picture('player1.PNG'),-50, 250)
-        s.picture(Picture('player2.PNG'),50, 250)
         key = s.getKeysPressed()
         s.show(1)
         if key[s.K_1]:
             return Picture('player1.PNG')
-            choice = False
         if key[s.K_2]:
             return Picture('player2.PNG')
-            choice = False

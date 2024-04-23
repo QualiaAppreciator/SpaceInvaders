@@ -3,7 +3,7 @@ import stddraw as s
 import functions as f
 from picture import Picture
 
-RADIUS = 20 #
+RADIUS = 20
 ANGULAR_SPEED = .025 
 
 class Enemies:
@@ -17,7 +17,7 @@ class Enemies:
     def move(self):
         if abs(self._x + self._speed) + self._graphic.width()/2 > 250:
             self._speed = -self._speed
-            self._y -= 14
+            self._y -= 16
         self._x += self._speed
 
     def draw(self):
@@ -28,7 +28,7 @@ class Missiles:
         self._x = x
         self._y = y
         self._theta = theta
-        self._speed = 5
+        self._speed = 2
 
     def move(self):
         if self._theta <= math.pi/2:
@@ -65,7 +65,7 @@ class Player:
     def draw(self):
         s.picture(self._graphic, self._x, self._y)
 
-    def moveCanon(self, key):
+    def moveCannon(self, key):
         if key == 'j':
             self._theta -= ANGULAR_SPEED
             if self._theta <= 0:
@@ -75,7 +75,7 @@ class Player:
             if self._theta >= math.pi:
                 self._theta = math.pi
 
-    def drawCanon(self):
+    def drawCannon(self):
         s.setPenColor(s.BLACK)
         s.setPenRadius(2.5)
         if self._theta <= math.pi/2:

@@ -4,10 +4,12 @@ import math, time
 from picture import Picture
 from gameObjects import Enemies, Missiles, Player
 
+
 BACKGROUND = Picture("background.PNG")
 ENEMIES = []
 MISSILES = []
 ENEMY_SPEED = 1
+
 
 def main():
     f.setCanvas()
@@ -42,7 +44,7 @@ def main():
 
         while gamePlay:
             key = s.getKeysPressed()
-            s.clear(s.BLACK)
+            s.clear()
             s.picture(BACKGROUND)
             f.score(score)
 
@@ -53,17 +55,17 @@ def main():
                 j.draw()
                 j.move()
             player.draw()
-            player.drawCanon()  
+            player.drawCannon()  
 
             if key[s.K_a]:
                 player.move('left')
             if key[s.K_d]:
                 player.move('right')
             if key[s.K_j]:
-                player.moveCanon('j')
+                player.moveCannon('j')
             if key[s.K_l]:
-                player.moveCanon('l')
-            if key[s.K_SPACE] and time.time() - fire_rate > .2:
+                player.moveCannon('l')
+            if key[s.K_SPACE] and (time.time() - fire_rate > .6):
                 MISSILES.append(Missiles(player._x, player._y, player._theta))
                 fire_rate = time.time()
             if key[s.K_q]:
@@ -73,6 +75,7 @@ def main():
                 gamePlay = False
 
             score = f.checkForHits(ENEMIES, MISSILES, score)
+
             gameStatus = f.gameStatus(ENEMIES, player)
             if gameStatus == 'YOU LOSE' or (gameStatus == 'YOU WIN' and levelCount == 4):
                 gamePlay = False
@@ -88,5 +91,7 @@ def main():
         MISSILES.clear()
         if overall and not key[s.K_e]:
             f.gameOver(gameStatus)
+
+
 
 if __name__ == '__main__': main()
