@@ -8,7 +8,7 @@ from gameObjects import Enemies, Missiles, Player
 BACKGROUND = Picture("background.PNG")
 ENEMIES = []
 MISSILES = []
-ENEMY_SPEED = 1
+ENEMY_MISSILES = []
 
 
 def main():
@@ -36,7 +36,7 @@ def main():
 
         f.populateENEMIES(ENEMIES)
         player = Player(0,25, math.pi/2, PLAYER_GRAPHIC)
-        fire_rate = 0
+        player_last_fired = 0
         score = 0
         levelCount = 1
         if gamePlay:
@@ -54,6 +54,9 @@ def main():
             for j in MISSILES:
                 j.draw()
                 j.move()
+            for g in ENEMY_MISSILES:
+                g.draw()
+                g.move()
             player.draw()
             player.drawCannon()  
 
@@ -65,9 +68,9 @@ def main():
                 player.moveCannon('j')
             if key[s.K_l]:
                 player.moveCannon('l')
-            if key[s.K_SPACE] and (time.time() - fire_rate > .6):
-                MISSILES.append(Missiles(player._x, player._y, player._theta))
-                fire_rate = time.time()
+            if key[s.K_SPACE] and (time.time() - player_last_fired > .6):
+                MISSILES.append(Missiles(player._x, player._y, player._theta, 0))
+                player_last_fired = time.time()
             if key[s.K_q]:
                 overall = False
                 gamePlay = False
@@ -76,7 +79,10 @@ def main():
 
             score = f.checkForHits(ENEMIES, MISSILES, score)
 
-            gameStatus = f.gameStatus(ENEMIES, player)
+            if levelCount > 2:
+                f.enemyCounterattack(player._x, ENEMY_MISSILES, ENEMIES)
+
+            gameStatus = f.gameStatus(ENEMIES, player, ENEMY_MISSILES)
             if gameStatus == 'YOU LOSE' or (gameStatus == 'YOU WIN' and levelCount == 4):
                 gamePlay = False
             if gameStatus == 'YOU WIN' and levelCount < 4:

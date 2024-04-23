@@ -4,13 +4,13 @@ import functions as f
 from picture import Picture
 
 RADIUS = 20
-ANGULAR_SPEED = .025 
+ANGULAR_SPEED = .02
 
 class Enemies:
-    def __init__(self, x, y, speed, hitpoints): 
+    def __init__(self, x, y, hitpoints): 
         self._x = x
         self._y = y
-        self._speed = speed 
+        self._speed = 1 
         self._hitpoints = hitpoints
         self._graphic = Picture("enemy.PNG")
 
@@ -21,22 +21,27 @@ class Enemies:
         self._x += self._speed
 
     def draw(self):
-        s.picture(self._graphic, self._x, self._y)
+        if self._hitpoints != 0:
+            s.picture(self._graphic, self._x, self._y)
 
 class Missiles:
-    def __init__(self, x, y, theta):
+    def __init__(self, x, y, theta, enemy):
         self._x = x
         self._y = y
         self._theta = theta
         self._speed = 2
+        self._enemy = enemy
 
     def move(self):
-        if self._theta <= math.pi/2:
-            self._x -= self._speed*math.cos(self._theta)
-            self._y += self._speed*math.sin(self._theta)
+        if self._enemy == 0:
+            if self._theta <= math.pi/2:
+                self._x -= self._speed*math.cos(self._theta)
+                self._y += self._speed*math.sin(self._theta)
+            else:
+                self._x += self._speed*math.sin(self._theta-math.pi/2)
+                self._y += self._speed*math.cos(self._theta-math.pi/2)
         else:
-            self._x += self._speed*math.sin(self._theta-math.pi/2)
-            self._y += self._speed*math.cos(self._theta-math.pi/2)
+            self._y -= 0.7*self._speed
 
     def draw(self):
         s.setPenColor(s.WHITE)
@@ -48,7 +53,7 @@ class Player:
         self._y = y
         self._theta = theta 
         self._graphic = graphic
-        self._speed = 1
+        self._speed = 0.8
 
     def move(self, key):
         if key == 'left':

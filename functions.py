@@ -1,9 +1,10 @@
 import stddraw as s
 import math, time
-from gameObjects import Enemies
-from project_main import ENEMY_SPEED, BACKGROUND
+from gameObjects import Enemies, Missiles, Player
+from project_main import BACKGROUND
 from picture import Picture
 
+ENEMY_LAST_FIRED = 0
 
 def setCanvas():
     s.setCanvasSize(500,500)
@@ -50,7 +51,7 @@ def populateENEMIES(ENEMIES):
     for i in range(3):
         x = -100
         for j in range(5):
-            ENEMIES.append(Enemies(x,y,ENEMY_SPEED,1))
+            ENEMIES.append(Enemies(x,y,1))
             x += 50
         y -= 50
 
@@ -59,8 +60,8 @@ def populateENEMIES(ENEMIES):
 def checkForHits(ENEMIES, MISSILES, highscore):
     for i in ENEMIES:
         for j in MISSILES:
-            if math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) - 18 <= 0:
-                ENEMIES.remove(i)
+            if (math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) <= 18) and i._hitpoints != 0:
+                i._hitpoints -= 1
                 MISSILES.remove(j)
                 highscore += 30
     for i in MISSILES:
@@ -70,12 +71,38 @@ def checkForHits(ENEMIES, MISSILES, highscore):
     return highscore
 
 
+#Added by Mikael
+#Fires missile if the enemy is above the player,
+#it is alive,
+#there isn't an enemy below it, 
+#and the recharge time has elapsed
+def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
+    global ENEMY_LAST_FIRED
+    for i in range(0, len(ENEMIES)):
+        if (abs(playerx - ENEMIES[i]._x) < 25) \
+            and ENEMIES[i]._hitpoints != 0 \
+            and ((i < 5 and ENEMIES[i+5]._hitpoints == 0 and ENEMIES[i+10]._hitpoints == 0) \
+                or (i >= 5 and i < 10 and (ENEMIES[i+5]._hitpoints == 0)) \
+                or (i >= 10)) \
+            and (time.time() - ENEMY_LAST_FIRED > 1.5):
+            ENEMY_MISSILES.append(Missiles(ENEMIES[i]._x, ENEMIES[i]._y, 0, 1))
+            ENEMY_LAST_FIRED = time.time()
 
-def gameStatus(ENEMIES, player):
-    if len(ENEMIES) == 0:
+
+def gameStatus(ENEMIES, player, ENEMY_MISSILES):
+    living_enemies = 0
+    for g in ENEMIES:
+        if g._hitpoints != 0:
+            living_enemies += 1
+    if living_enemies == 0:
         return 'YOU WIN'
+    
     for i in ENEMIES:
         if math.sqrt((player._x-i._x)**2 + (player._y-i._y)**2) <= 50:
+            return 'YOU LOSE'
+        
+    for j in ENEMY_MISSILES:
+        if math.sqrt((player._x-j._x)**2+(player._y-j._y)**2) <= 35:
             return 'YOU LOSE'
 
 
