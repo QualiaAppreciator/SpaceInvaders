@@ -1,104 +1,92 @@
 import stddraw as s
-import stdio
 import functions as f
-import random
-import time 
-import math
+import math, time
 from picture import Picture
-######################################################################
-# GLOBAL VARIABLES DECLARED HERE 
-RADIUS = 20
+from gameObjects import Enemies, Missiles, Player
+
+BACKGROUND = Picture("background.PNG")
 ENEMIES = []
 MISSILES = []
-ENEMY_SPEED = 0.4
-LAST_MISSILE_FIRED_TIME = -1
-BACKGROUND = Picture('background.PNG') # background picture used is from the website 'https://www.freepik.com/free-photos-vectors/space' and is not under copyright
-#####################################################################
+ENEMY_SPEED = 1
 
 def main():
-
-    s.setCanvasSize(500,500)
-    s.setXscale(-250,250)
-    s.setYscale(0,500)
-    s.setFontSize(16)
-
-    menu = True
+    f.setCanvas()
     overall = True
+    PLAYER_GRAPHIC = Picture("player1.PNG")
 
-    f.createEnemies()
-
-    while overall == True:
-
+    while overall:
         menu = True
-        rx = 0.0
-        s.setPenColor(s.BLACK)
+        gamePlay = True
 
-        while menu == True:
+        while menu:
             f.drawMenu()
-
             key = s.getKeysPressed()
-
             if key[s.K_p]:
                 menu = False
-            elif key[s.K_q]:
+            if key[s.K_q]:
                 overall = False
                 menu = False
-            elif key[s.K_i]: #instructions option, added by Josh
+                gamePlay = False
+            if key[s.K_i]:
                 f.drawInstructions()
+            if key[s.K_c]:
+                PLAYER_GRAPHIC = f.playerChoice()
 
-        if overall == False:
-            game_play = False
-        else:
-            game_play = True
+        f.populateENEMIES(ENEMIES)
+        player = Player(0,25, math.pi/2, PLAYER_GRAPHIC)
+        fire_rate = 0
+        score = 0
+        levelCount = 1
+        if gamePlay:
+            levelCount = f.levelDisplay(levelCount)
 
-        theta = math.pi/2
-
-        while game_play == True:
-            key = ''
-
+        while gamePlay:
             key = s.getKeysPressed()
-
-            if key[s.K_e]:
-                game_play = False
-            elif key[s.K_q]:
-                overall = False
-                game_play = False
-            elif key[s.K_a]:
-                key = 'a'
-            elif key[s.K_d]:
-                key = 'd'
-            elif key[s.K_j]:
-                key = 'j'
-            elif key[s.K_l]:
-                key = 'l'
-            elif key[s.K_SPACE]:
-                key = ' '
- 
-            rx = f.movePlayer(key,rx)  
-            theta = f.cannonAngle(key,rx,theta)
-            
             s.clear(s.BLACK)
             s.picture(BACKGROUND)
-            f.moveEnemies()
-            s.setPenColor(s.GREEN)
-            s.filledCircle(rx,20,RADIUS)
-            f.drawCannon(rx,theta)
-            f.missile(rx,theta,key)
+            f.score(score)
 
-            s.text(-210, 490, "Score = " + str(f.HIGHSCORE))
+            for k in ENEMIES:
+                k.draw()
+                k.move()
+            for j in MISSILES:
+                j.draw()
+                j.move()
+            player.draw()
+            player.drawCanon()  
 
-            gameStatus = f.checkGameStatus(rx)
-            if gameStatus == "Lost" or gameStatus == "Won":
-                game_play = False
+            if key[s.K_a]:
+                player.move('left')
+            if key[s.K_d]:
+                player.move('right')
+            if key[s.K_j]:
+                player.moveCanon('j')
+            if key[s.K_l]:
+                player.moveCanon('l')
+            if key[s.K_SPACE] and time.time() - fire_rate > .2:
+                MISSILES.append(Missiles(player._x, player._y, player._theta))
+                fire_rate = time.time()
+            if key[s.K_q]:
+                overall = False
+                gamePlay = False
+            if key[s.K_e]:
+                gamePlay = False
 
-            s.show(1)
+            score = f.checkForHits(ENEMIES, MISSILES, score)
+            gameStatus = f.gameStatus(ENEMIES, player)
+            if gameStatus == 'YOU LOSE' or (gameStatus == 'YOU WIN' and levelCount == 4):
+                gamePlay = False
+            if gameStatus == 'YOU WIN' and levelCount < 4:
+                levelCount = f.levelDisplay(levelCount)
+                ENEMIES.clear()
+                MISSILES.clear()
+                f.populateENEMIES(ENEMIES)
+            
+            s.show(0)
 
-        if overall:
+        ENEMIES.clear()
+        MISSILES.clear()
+        if overall and not key[s.K_e]:
             f.gameOver(gameStatus)
-
-    s.clear(s.BLACK)
-    s.setPenColor(s.WHITE)
-    s.text(0,250,"Thanks for playing")
-    s.show()
 
 if __name__ == '__main__': main()
