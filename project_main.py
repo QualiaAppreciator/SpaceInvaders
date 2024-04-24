@@ -76,9 +76,9 @@ def main():
                 player.move('left')
             if key[s.K_d]:
                 player.move('right')
-            if key[s.K_j]:
+            if key[s.K_4]:
                 player.moveCannon('j')
-            if key[s.K_l]:
+            if key[s.K_6]:
                 player.moveCannon('l')
             if key[s.K_SPACE] and (time.time() - player_last_fired > .6):
                 MISSILES.append(Missiles(player._x, player._y, player._theta, 0))
