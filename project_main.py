@@ -93,12 +93,14 @@ def main():
                 levelCount = f.levelDisplay(levelCount)
                 ENEMIES.clear()
                 MISSILES.clear()
+                ENEMY_MISSILES.clear()
                 f.populateENEMIES(ENEMIES)
             
             s.show(0)
 
         ENEMIES.clear()
         MISSILES.clear()
+        ENEMY_MISSILES.clear()
         if overall and not key[s.K_e]:
             f.gameOver(levelCount, score)
 
