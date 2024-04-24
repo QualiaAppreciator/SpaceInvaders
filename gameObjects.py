@@ -84,11 +84,11 @@ class Player:
         s.picture(self._graphic, self._x, self._y)
 
     def moveCannon(self, key):
-        if key == 'j':
+        if key == 'j' or key == 'b':
             self._theta -= ANGULAR_SPEED
             if self._theta <= 0:
                 self._theta = 0
-        if key == 'l':
+        if key == 'l' or key == 'm':
             self._theta += ANGULAR_SPEED
             if self._theta >= math.pi:
                 self._theta = math.pi

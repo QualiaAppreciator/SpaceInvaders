@@ -80,8 +80,8 @@ def populateBUNKERS(BUNKERS):
 
 
 
-# Written by Mikael
-# Moved from main for modularity and threading purposes
+# Moved by Mikael
+# Moved from main for modularity
 def moveEverything(ENEMIES, MISSILES, ENEMY_MISSILES, BUNKERS, player):
     for k in ENEMIES:
         k.draw()
@@ -144,6 +144,8 @@ def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
             ENEMY_MISSILES.append(Missiles(ENEMIES[i]._x, ENEMIES[i]._y, 0, 1))
             ENEMY_LAST_FIRED = time.time()
 
+
+
 # Written by Mikael and Josh
 # Checks status of the game
 # Returns 'LOST' if an enemy missile or an enemy touches the player,
@@ -168,11 +170,11 @@ def gameStatus(ENEMIES, player, ENEMY_MISSILES):
 
 # Written by Mikael and Josh
 # Displays the GAME OVER message and the most recently played game's statistics
-def gameOver(levelCount, score):
+def gameOver(levelCount):
     s.picture(BACKGROUND)
     s.setFontSize(16)
     s.text(0,250,"GAME OVER")
-    s.text(0,235,"Final score: " + str(score))
+    s.text(0,235,"Final score: " + str(SCORE))
     s.text(0,220,"Level reached: " + str(levelCount-1))
     s.show(1)
     time.sleep(3)
