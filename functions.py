@@ -142,7 +142,7 @@ def gameOver(levelCount, score):
     s.setFontSize(16)
     s.text(0,250,"GAME OVER")
     s.text(0,235,"Final score: " + str(score))
-    s.text(0,220,"Level reached: " + str(levelCount))
+    s.text(0,220,"Level reached: " + str(levelCount-1))
     s.show(1)
     time.sleep(3)
 
