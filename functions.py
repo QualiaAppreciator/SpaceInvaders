@@ -3,19 +3,8 @@ import math, time
 from gameObjects import Enemies, Missiles, Player, Bunker
 from project_main import BACKGROUND
 from picture import Picture
-import stdaudio
 
 ENEMY_LAST_FIRED = 0
-SCORE = 0
-
-# Added by Mikael
-def music():
-    stdaudio.playFile("Mainmenu")
-
-# Added by Mikael
-def pew():
-    stdaudio.playFile("pew")
-
 
 # Added by Josh
 # Initialises the canvas
@@ -79,38 +68,17 @@ def populateBUNKERS(BUNKERS):
     BUNKERS.append(Bunker(140,170,4))
 
 
-
-# Moved by Mikael
-# Moved from main for modularity
-def moveEverything(ENEMIES, MISSILES, ENEMY_MISSILES, BUNKERS, player):
-    for k in ENEMIES:
-        k.draw()
-        k.move()
-    for j in MISSILES:
-        j.draw()
-        j.move()
-    for g in ENEMY_MISSILES:
-        g.draw()
-        g.move()
-    for p in BUNKERS:
-        p.draw()
-    player.draw()
-    player.drawCannon()    
-
-
 # Written by Mikael and Josh
 # Checks if any of the Missiles fired by the player is touching an enemy,
 # if it is, lowers that enemy's hitpoints by 1 and removes the Missile object from MISSILES
 # Removes a Missile object from MISSILES if it moves out of the borders of the game
-def checkForHits(ENEMIES, BUNKERS, MISSILES):
-    global SCORE
-
+def checkForHits(ENEMIES, BUNKERS, MISSILES, highscore):
     for i in ENEMIES:
         for j in MISSILES:
-            if (math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) <= 23) and i._hitpoints != 0:
+            if (math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) <= 18) and i._hitpoints != 0:
                 i._hitpoints -= 1
                 MISSILES.remove(j)
-                SCORE += 30
+                highscore += 30
 
     for i in BUNKERS:
         for j in MISSILES:
@@ -118,11 +86,13 @@ def checkForHits(ENEMIES, BUNKERS, MISSILES):
                 i._hitpoints -= 1
                 MISSILES.remove(j)
                 if i._hitpoints == 0:
-                    SCORE += 20
+                    highscore += 20
     
     for i in MISSILES:
         if i._x < -250 or i._x > 250 or i._y > 500:
             MISSILES.remove(i)
+
+    return highscore
 
 
 # Written by Mikael
@@ -130,51 +100,39 @@ def checkForHits(ENEMIES, BUNKERS, MISSILES):
 # it is alive,
 # there isn't an enemy below it,
 # and the recharge time has elapsed
-def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
+def enemyCounterattack(player, ENEMY_MISSILES, ENEMIES):
     global ENEMY_LAST_FIRED
-
     for i in range(0, len(ENEMIES)):
-        if (abs(playerx - ENEMIES[i]._x) < 25) \
+        if (abs(player._x - ENEMIES[i]._x) < 25) \
             and ENEMIES[i]._hitpoints != 0 \
             and ((i < 5 and ENEMIES[i+5]._hitpoints == 0 and ENEMIES[i+10]._hitpoints == 0) \
                 or (i >= 5 and i < 10 and (ENEMIES[i+5]._hitpoints == 0)) \
                 or (i >= 10)) \
-            and (time.time() - ENEMY_LAST_FIRED > 1.5):
+            and (time.time() - ENEMY_LAST_FIRED > 1.5) and player._hitpoints > 0:
 
             ENEMY_MISSILES.append(Missiles(ENEMIES[i]._x, ENEMIES[i]._y, 0, 1))
             ENEMY_LAST_FIRED = time.time()
-
-
 
 # Written by Mikael and Josh
 # Checks status of the game
 # Returns 'LOST' if an enemy missile or an enemy touches the player,
 # or an enemy touches the bottom border
 # Returns 'WON' if all enemies are dead
-def gameStatus(ENEMIES, player, ENEMY_MISSILES):
+def gameStatus(ENEMIES, ENEMY_MISSILES):
     living_enemies = 0
     for g in ENEMIES:
         if g._hitpoints != 0:
             living_enemies += 1
     if living_enemies == 0:
         return 'WON'
-    
-    for i in ENEMIES:
-        if math.sqrt((player._x-i._x)**2 + (player._y-i._y)**2) <= 50:
-            return 'LOST'
-        
-    for j in ENEMY_MISSILES:
-        if math.sqrt((player._x-j._x)**2+(player._y-j._y)**2) <= 35:
-            return 'LOST'
-
 
 # Written by Mikael and Josh
 # Displays the GAME OVER message and the most recently played game's statistics
-def gameOver(levelCount):
+def gameOver(levelCount, score):
     s.picture(BACKGROUND)
     s.setFontSize(16)
     s.text(0,250,"GAME OVER")
-    s.text(0,235,"Final score: " + str(SCORE))
+    s.text(0,235,"Final score: " + str(score))
     s.text(0,220,"Level reached: " + str(levelCount-1))
     s.show(1)
     time.sleep(3)
@@ -182,10 +140,10 @@ def gameOver(levelCount):
 
 # Added by Mikael 
 # Displays the current score in the top left corner
-def score():
+def score(score):
     s.setPenColor(s.WHITE)
     s.setFontSize(16)
-    s.text(-210,490,"score = " + str(SCORE))
+    s.text(-210,490,"score = " + str(score))
 
 
 # Added by Josh
@@ -222,3 +180,13 @@ def playerChoice():
             return Picture('player1.PNG')
         if key[s.K_2]:
             return Picture('player2.PNG')
+
+def checkIfPlayerHit(player, ENEMY_MISSILES, ENEMIES):
+    for i in ENEMY_MISSILES:
+        if math.sqrt((player._x-i._x)**2+(player._y-i._y)**2) <= 35:
+            player._hitpoints -= 1
+            ENEMY_MISSILES.remove(i)
+    for j in ENEMIES:
+        if math.sqrt((player._x-j._x)**2 + (player._y-j._y)**2) <= 50:
+            player._hitpoints = 0
+    return player._hitpoints
