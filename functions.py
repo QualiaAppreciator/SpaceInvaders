@@ -6,6 +6,7 @@ from picture import Picture
 
 ENEMY_LAST_FIRED = 0
 
+# Added by Josh
 def setCanvas():
     s.setCanvasSize(500,500)
     s.setXscale(-250,250)
@@ -13,7 +14,8 @@ def setCanvas():
     s.setFontSize(16)
 
 
-
+# Added by Josh
+# displays the menu
 def drawMenu():
     s.clear()
     s.setPenColor(s.WHITE)
@@ -27,7 +29,8 @@ def drawMenu():
     s.show(1)
 
 
-
+# Added by Josh
+# display the game instructions
 def drawInstructions():
     instructions = True 
     while instructions:
@@ -45,7 +48,8 @@ def drawInstructions():
         s.show(1)
 
 
-
+# Added by Josh
+# Puts Enemy objects and their initial conditions in the list ENENMIES
 def populateENEMIES(ENEMIES):
     y = 450
     for i in range(3):
@@ -56,7 +60,9 @@ def populateENEMIES(ENEMIES):
         y -= 50
 
 
-
+# Written by Mikael and Josh
+# checks if any of the Missiles fired by the player is touching an enemy, if it is, lowers that enemies hitpoints by 1 and removes the Missile object from MISSILES
+# removes a Missile object from MISSILES if it moves out of the boarders of the game
 def checkForHits(ENEMIES, MISSILES, highscore):
     for i in ENEMIES:
         for j in MISSILES:
@@ -88,7 +94,8 @@ def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
             ENEMY_MISSILES.append(Missiles(ENEMIES[i]._x, ENEMIES[i]._y, 0, 1))
             ENEMY_LAST_FIRED = time.time()
 
-
+# Written by Mikael and Josh
+# checks conditions of the the game and returns the current state, returns that state
 def gameStatus(ENEMIES, player, ENEMY_MISSILES):
     living_enemies = 0
     for g in ENEMIES:
@@ -106,7 +113,8 @@ def gameStatus(ENEMIES, player, ENEMY_MISSILES):
             return 'LOST'
 
 
-
+# Written by Mikael and Josh
+# displays the GAME OVER message and most recently played games statistics
 def gameOver(levelCount, score):
     s.picture(BACKGROUND)
     s.setFontSize(16)
@@ -117,14 +125,15 @@ def gameOver(levelCount, score):
     time.sleep(3)
 
 
-
+# Added by Mikael 
 def score(score):
     s.setPenColor(s.WHITE)
     s.setFontSize(16)
     s.text(-210,490,"score = " + str(score))
 
 
-
+# Added by Josh
+# displays the level about to be played and returns that level incremented by one 
 def levelDisplay(levelCount):
     currentTime = time.time()
     s.clear(s.BLACK)
@@ -136,7 +145,9 @@ def levelDisplay(levelCount):
     return levelCount + 1
 
 
-
+# Written by Mikael and Josh
+# displays a character choice menuy and allows the player to choose a graphic as their character
+# this function is accessed from the game menu
 def playerChoice():
     choice = True
     s.picture(BACKGROUND)
