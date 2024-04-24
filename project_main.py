@@ -3,8 +3,6 @@ import functions as f
 import math, time
 from picture import Picture
 from gameObjects import Enemies, Missiles, Player
-#penius
-
 
 BACKGROUND = Picture("background.PNG")
 ENEMIES = []
