@@ -33,16 +33,7 @@ class Missiles:
         self._enemy = enemy
 
         if self._enemy == 0:
-            if self._theta >= 4*math.pi/9 and self._theta <= 5*math.pi/9:
-                self._graphic = Picture("missile1.PNG")
-            elif self._theta >= math.pi/3 and self._theta <= 4*math.pi/9:
-                self._graphic = Picture("missile1_slant_right.PNG")
-            elif self._theta >= 5*math.pi/9 and self._theta <= 2*math.pi/3:
-                self._graphic = Picture("missile1.PNG")
-            elif self._theta <= math.pi/3 and self._theta >= 0:
-                self._graphic = Picture("missile1_right.PNG")
-            else:
-                self._graphic = Picture("missile1_left.PNG")
+            self._graphic = Picture("missile1.PNG")
         else:
             self._graphic = Picture("missile2_down.PNG")
 
@@ -61,12 +52,13 @@ class Missiles:
         s.picture(self._graphic, self._x, self._y)
 
 class Player:
-    def __init__(self, x, y, theta, graphic):
+    def __init__(self, x, y, theta, graphic, hitpoints):
         self._x = x
         self._y = y
         self._theta = theta 
         self._graphic = graphic
         self._speed = 0.8
+        self._hitpoints = hitpoints
 
     def move(self, key):
         if key == 'left':
@@ -81,25 +73,27 @@ class Player:
                 self._x += self._speed
 
     def draw(self):
-        s.picture(self._graphic, self._x, self._y)
+        if self._hitpoints > 0:
+            s.picture(self._graphic, self._x, self._y)
 
     def moveCannon(self, key):
-        if key == 'j' or key == 'b':
+        if key == 'j':
             self._theta -= ANGULAR_SPEED
             if self._theta <= 0:
                 self._theta = 0
-        if key == 'l' or key == 'm':
+        if key == 'l':
             self._theta += ANGULAR_SPEED
             if self._theta >= math.pi:
                 self._theta = math.pi
 
     def drawCannon(self):
-        s.setPenColor(s.BLACK)
-        s.setPenRadius(2.5)
-        if self._theta <= math.pi/2:
-            s.line(self._x, self._y, self._x-RADIUS*math.cos(self._theta), self._y+RADIUS*math.sin(self._theta))
-        else:
-            s.line(self._x, self._y, self._x+RADIUS*math.sin(self._theta-math.pi/2), self._y+RADIUS*math.cos(self._theta-math.pi/2))
+        if self._hitpoints > 0:
+            s.setPenColor(s.BLACK)
+            s.setPenRadius(2.5)
+            if self._theta <= math.pi/2:
+                s.line(self._x, self._y, self._x-RADIUS*math.cos(self._theta), self._y+RADIUS*math.sin(self._theta))
+            else:
+                s.line(self._x, self._y, self._x+RADIUS*math.sin(self._theta-math.pi/2), self._y+RADIUS*math.cos(self._theta-math.pi/2))
 
 
 # Written by Mikael
