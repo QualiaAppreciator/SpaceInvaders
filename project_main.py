@@ -102,7 +102,7 @@ def main():
                     MISSILES2.append(Missiles(player2._x, player2._y, player2._theta, 0))
                     player2_last_fired = time.time()
                 f.enemyCounterattack(player2._x, ENEMY_MISSILES, ENEMIES)
-                score = f.chackForHits(ENEMIES, BUNKERS, MISSILES2, score)
+                score = f.checkForHits(ENEMIES, BUNKERS, MISSILES2, score)
             
             if key[s.K_q]:
                 overall = False
