@@ -1,9 +1,10 @@
 import stddraw as s
+import stdaudio
 import functions as f
 import math, time
 from picture import Picture
 from gameObjects import Enemies, Missiles, Player
-import threading
+from threading import Thread
 
 
 BACKGROUND = Picture("background.PNG")
@@ -17,6 +18,9 @@ def main():
     f.setCanvas()
     overall = True
     PLAYER_GRAPHIC = Picture("player1.PNG")
+
+    music_thread = Thread(target=f.music,daemon=True)
+    music_thread.start()
 
     while overall:
         menu = True
@@ -49,21 +53,10 @@ def main():
             key = s.getKeysPressed()
             s.clear()
             s.picture(BACKGROUND)
-            f.score(score)
+            f.score()
 
-            for k in ENEMIES:
-                k.draw()
-                k.move()
-            for j in MISSILES:
-                j.draw()
-                j.move()
-            for g in ENEMY_MISSILES:
-                g.draw()
-                g.move()
-            for p in BUNKERS:
-                p.draw()
-            player.draw()
-            player.drawCannon()  
+            f.moveEverything(ENEMIES, MISSILES, ENEMY_MISSILES, BUNKERS, player)
+            f.checkForHits(ENEMIES, BUNKERS, MISSILES)
 
             if key[s.K_a]:
                 player.move('left')
@@ -75,14 +68,14 @@ def main():
                 player.moveCannon('l')
             if key[s.K_SPACE] and (time.time() - player_last_fired > .6):
                 MISSILES.append(Missiles(player._x, player._y, player._theta, 0))
+                # pew_thread = Thread(target=f.pew,daemon=True)
+                # pew_thread.start()
                 player_last_fired = time.time()
             if key[s.K_q]:
                 overall = False
                 gamePlay = False
             if key[s.K_e]:
                 gamePlay = False
-
-            score = f.checkForHits(ENEMIES, BUNKERS, MISSILES, score)
 
             #if levelCount > 2:
             f.enemyCounterattack(player._x, ENEMY_MISSILES, ENEMIES)
@@ -104,7 +97,6 @@ def main():
         ENEMY_MISSILES.clear()
         if overall and not key[s.K_e]:
             f.gameOver(levelCount, score)
-
 
 
 if __name__ == '__main__': main()

@@ -3,8 +3,19 @@ import math, time
 from gameObjects import Enemies, Missiles, Player, Bunker
 from project_main import BACKGROUND
 from picture import Picture
+import stdaudio
 
 ENEMY_LAST_FIRED = 0
+SCORE = 0
+
+# Added by Mikael
+def music():
+    stdaudio.playFile("Mainmenu")
+
+# Added by Mikael
+def pew():
+    stdaudio.playFile("pew")
+
 
 # Added by Josh
 # Initialises the canvas
@@ -68,17 +79,38 @@ def populateBUNKERS(BUNKERS):
     BUNKERS.append(Bunker(140,170,4))
 
 
+
+# Written by Mikael
+# Moved from main for modularity and threading purposes
+def moveEverything(ENEMIES, MISSILES, ENEMY_MISSILES, BUNKERS, player):
+    for k in ENEMIES:
+        k.draw()
+        k.move()
+    for j in MISSILES:
+        j.draw()
+        j.move()
+    for g in ENEMY_MISSILES:
+        g.draw()
+        g.move()
+    for p in BUNKERS:
+        p.draw()
+    player.draw()
+    player.drawCannon()    
+
+
 # Written by Mikael and Josh
 # Checks if any of the Missiles fired by the player is touching an enemy,
 # if it is, lowers that enemy's hitpoints by 1 and removes the Missile object from MISSILES
 # Removes a Missile object from MISSILES if it moves out of the borders of the game
-def checkForHits(ENEMIES, BUNKERS, MISSILES, highscore):
+def checkForHits(ENEMIES, BUNKERS, MISSILES):
+    global SCORE
+
     for i in ENEMIES:
         for j in MISSILES:
-            if (math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) <= 18) and i._hitpoints != 0:
+            if (math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) <= 23) and i._hitpoints != 0:
                 i._hitpoints -= 1
                 MISSILES.remove(j)
-                highscore += 30
+                SCORE += 30
 
     for i in BUNKERS:
         for j in MISSILES:
@@ -86,13 +118,11 @@ def checkForHits(ENEMIES, BUNKERS, MISSILES, highscore):
                 i._hitpoints -= 1
                 MISSILES.remove(j)
                 if i._hitpoints == 0:
-                    highscore += 20
+                    SCORE += 20
     
     for i in MISSILES:
         if i._x < -250 or i._x > 250 or i._y > 500:
             MISSILES.remove(i)
-
-    return highscore
 
 
 # Written by Mikael
@@ -102,6 +132,7 @@ def checkForHits(ENEMIES, BUNKERS, MISSILES, highscore):
 # and the recharge time has elapsed
 def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
     global ENEMY_LAST_FIRED
+
     for i in range(0, len(ENEMIES)):
         if (abs(playerx - ENEMIES[i]._x) < 25) \
             and ENEMIES[i]._hitpoints != 0 \
@@ -149,10 +180,10 @@ def gameOver(levelCount, score):
 
 # Added by Mikael 
 # Displays the current score in the top left corner
-def score(score):
+def score():
     s.setPenColor(s.WHITE)
     s.setFontSize(16)
-    s.text(-210,490,"score = " + str(score))
+    s.text(-210,490,"score = " + str(SCORE))
 
 
 # Added by Josh

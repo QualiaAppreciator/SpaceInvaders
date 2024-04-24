@@ -33,7 +33,16 @@ class Missiles:
         self._enemy = enemy
 
         if self._enemy == 0:
-            self._graphic = Picture("missile1.PNG")
+            if self._theta >= 4*math.pi/9 and self._theta <= 5*math.pi/9:
+                self._graphic = Picture("missile1.PNG")
+            elif self._theta >= math.pi/3 and self._theta <= 4*math.pi/9:
+                self._graphic = Picture("missile1_slant_right.PNG")
+            elif self._theta >= 5*math.pi/9 and self._theta <= 2*math.pi/3:
+                self._graphic = Picture("missile1.PNG")
+            elif self._theta <= math.pi/3 and self._theta >= 0:
+                self._graphic = Picture("missile1_right.PNG")
+            else:
+                self._graphic = Picture("missile1_left.PNG")
         else:
             self._graphic = Picture("missile2_down.PNG")
 
