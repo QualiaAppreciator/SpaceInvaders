@@ -9,6 +9,7 @@ BACKGROUND = Picture("background.PNG")
 ENEMIES = []
 MISSILES = []
 ENEMY_MISSILES = []
+BUNKERS = []
 
 
 def main():
@@ -35,6 +36,7 @@ def main():
                 PLAYER_GRAPHIC = f.playerChoice()
 
         f.populateENEMIES(ENEMIES)
+        f.populateBUNKERS(BUNKERS)
         player = Player(0,25, math.pi/2, PLAYER_GRAPHIC)
         player_last_fired = 0
         score = 0
@@ -57,6 +59,8 @@ def main():
             for g in ENEMY_MISSILES:
                 g.draw()
                 g.move()
+            for p in BUNKERS:
+                p.draw()
             player.draw()
             player.drawCannon()  
 
@@ -77,7 +81,7 @@ def main():
             if key[s.K_e]:
                 gamePlay = False
 
-            score = f.checkForHits(ENEMIES, MISSILES, score)
+            score = f.checkForHits(ENEMIES, BUNKERS, MISSILES, score)
 
             #if levelCount > 2:
             f.enemyCounterattack(player._x, ENEMY_MISSILES, ENEMIES)

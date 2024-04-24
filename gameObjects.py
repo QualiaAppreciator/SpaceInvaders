@@ -92,6 +92,25 @@ class Player:
         else:
             s.line(self._x, self._y, self._x+RADIUS*math.sin(self._theta-math.pi/2), self._y+RADIUS*math.cos(self._theta-math.pi/2))
 
+
+# Written by Mikael
+class Bunker:
+    def __init__(self, x, y, hitpoints):
+        self._x = x
+        self._y = y
+        self._hitpoints = hitpoints
+
+    def draw(self):
+        if self._hitpoints != 0:
+            if self._hitpoints <= 2:
+                s.picture(Picture("bunker5.PNG"), self._x, self._y)
+                return
+            if self._hitpoints <= 4:
+                s.picture(Picture("bunker2.PNG"), self._x, self._y)
+                return
+            if self._hitpoints <= 6:
+                s.picture(Picture("bunker1.PNG"), self._x, self._y)
+
 def main():
     pass
 

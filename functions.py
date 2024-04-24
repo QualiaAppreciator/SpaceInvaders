@@ -1,12 +1,13 @@
 import stddraw as s
 import math, time
-from gameObjects import Enemies, Missiles, Player
+from gameObjects import Enemies, Missiles, Player, Bunker
 from project_main import BACKGROUND
 from picture import Picture
 
 ENEMY_LAST_FIRED = 0
 
 # Added by Josh
+# Initialises the canvas
 def setCanvas():
     s.setCanvasSize(500,500)
     s.setXscale(-250,250)
@@ -15,7 +16,7 @@ def setCanvas():
 
 
 # Added by Josh
-# displays the menu
+# Displays the main menu
 def drawMenu():
     s.clear()
     s.setPenColor(s.WHITE)
@@ -30,7 +31,7 @@ def drawMenu():
 
 
 # Added by Josh
-# display the game instructions
+# Displays the game instructions
 def drawInstructions():
     instructions = True 
     while instructions:
@@ -49,7 +50,7 @@ def drawInstructions():
 
 
 # Added by Josh
-# Puts Enemy objects and their initial conditions in the list ENENMIES
+# Puts Enemy objects and their initial conditions in the list ENEMIES
 def populateENEMIES(ENEMIES):
     y = 450
     for i in range(3):
@@ -60,16 +61,33 @@ def populateENEMIES(ENEMIES):
         y -= 50
 
 
+# Written by Mikael
+def populateBUNKERS(BUNKERS):
+    BUNKERS.append(Bunker(-140,170,4))
+    BUNKERS.append(Bunker(0,170,6))
+    BUNKERS.append(Bunker(140,170,4))
+
+
 # Written by Mikael and Josh
-# checks if any of the Missiles fired by the player is touching an enemy, if it is, lowers that enemies hitpoints by 1 and removes the Missile object from MISSILES
-# removes a Missile object from MISSILES if it moves out of the boarders of the game
-def checkForHits(ENEMIES, MISSILES, highscore):
+# Checks if any of the Missiles fired by the player is touching an enemy,
+# if it is, lowers that enemy's hitpoints by 1 and removes the Missile object from MISSILES
+# Removes a Missile object from MISSILES if it moves out of the borders of the game
+def checkForHits(ENEMIES, BUNKERS, MISSILES, highscore):
     for i in ENEMIES:
         for j in MISSILES:
             if (math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) <= 18) and i._hitpoints != 0:
                 i._hitpoints -= 1
                 MISSILES.remove(j)
                 highscore += 30
+
+    for i in BUNKERS:
+        for j in MISSILES:
+            if (math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) <= 40) and i._hitpoints != 0:
+                i._hitpoints -= 1
+                MISSILES.remove(j)
+                if i._hitpoints == 0:
+                    highscore += 20
+    
     for i in MISSILES:
         if i._x < -250 or i._x > 250 or i._y > 500:
             MISSILES.remove(i)
@@ -77,11 +95,11 @@ def checkForHits(ENEMIES, MISSILES, highscore):
     return highscore
 
 
-#Added by Mikael
-#Fires missile if the enemy is above the player,
-#it is alive,
-#there isn't an enemy below it, 
-#and the recharge time has elapsed
+# Written by Mikael
+# Enemy fires Missile if the enemy is above the player,
+# it is alive,
+# there isn't an enemy below it,
+# and the recharge time has elapsed
 def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
     global ENEMY_LAST_FIRED
     for i in range(0, len(ENEMIES)):
@@ -91,11 +109,15 @@ def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
                 or (i >= 5 and i < 10 and (ENEMIES[i+5]._hitpoints == 0)) \
                 or (i >= 10)) \
             and (time.time() - ENEMY_LAST_FIRED > 1.5):
+
             ENEMY_MISSILES.append(Missiles(ENEMIES[i]._x, ENEMIES[i]._y, 0, 1))
             ENEMY_LAST_FIRED = time.time()
 
 # Written by Mikael and Josh
-# checks conditions of the the game and returns the current state, returns that state
+# Checks status of the game
+# Returns 'LOST' if an enemy missile or an enemy touches the player,
+# or an enemy touches the bottom border
+# Returns 'WON' if all enemies are dead
 def gameStatus(ENEMIES, player, ENEMY_MISSILES):
     living_enemies = 0
     for g in ENEMIES:
@@ -114,7 +136,7 @@ def gameStatus(ENEMIES, player, ENEMY_MISSILES):
 
 
 # Written by Mikael and Josh
-# displays the GAME OVER message and most recently played games statistics
+# Displays the GAME OVER message and the most recently played game's statistics
 def gameOver(levelCount, score):
     s.picture(BACKGROUND)
     s.setFontSize(16)
@@ -126,6 +148,7 @@ def gameOver(levelCount, score):
 
 
 # Added by Mikael 
+# Displays the current score in the top left corner
 def score(score):
     s.setPenColor(s.WHITE)
     s.setFontSize(16)
@@ -133,7 +156,7 @@ def score(score):
 
 
 # Added by Josh
-# displays the level about to be played and returns that level incremented by one 
+# Displays the level about to be played and returns that level incremented by one 
 def levelDisplay(levelCount):
     currentTime = time.time()
     s.clear(s.BLACK)
@@ -145,9 +168,9 @@ def levelDisplay(levelCount):
     return levelCount + 1
 
 
-# Written by Mikael and Josh
-# displays a character choice menuy and allows the player to choose a graphic as their character
-# this function is accessed from the game menu
+# Written by Josh
+# Displays a character choice menu and allows the player to choose a graphic as their character
+# This function is accessed from the game menu
 def playerChoice():
     choice = True
     s.picture(BACKGROUND)
