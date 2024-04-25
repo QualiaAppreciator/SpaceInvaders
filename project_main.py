@@ -25,7 +25,7 @@ def main():
     while overall:
         menu = True
         gamePlay = True
-        twoPlayers = True
+        twoPlayers = False
 
         while menu:
             f.drawMenu()
@@ -73,9 +73,9 @@ def main():
                 player.moveCannon('j')
             if key[s.K_6]:
                 player.moveCannon('l')
-            if key[s.K_SPACE] and (time.time() - player_last_fired > .6):
+            if key[s.K_SPACE] and (time.time() - player_last_fired > .9):
                 MISSILES.append(Missiles(player._x, player._y, player._theta, 0))
-                # pew_thread = Thread(target=f.pew,daemon=True)
+                # pew_thread = Thread(target=f.pew)
                 # pew_thread.start()
                 player_last_fired = time.time()
 
@@ -104,8 +104,8 @@ def main():
 
             f.moveEverything(ENEMIES, MISSILES, ENEMY_MISSILES, BUNKERS, player)
             f.checkForHits(ENEMIES, BUNKERS, MISSILES)
-            if levelCount > 2:
-                f.enemyCounterattack(player._x, ENEMY_MISSILES, ENEMIES)
+            #if levelCount > 2:
+            f.enemyCounterattack(player._x, ENEMY_MISSILES, ENEMIES)
 
             gameStatus = f.gameStatus(ENEMIES, player, ENEMY_MISSILES)
             if gameStatus == 'LOST' or (gameStatus == 'WON' and levelCount == 4):
@@ -115,7 +115,9 @@ def main():
                 ENEMIES.clear()
                 MISSILES.clear()
                 ENEMY_MISSILES.clear()
+                BUNKERS.clear()
                 f.populateENEMIES(ENEMIES)
+                f.populateBUNKERS(BUNKERS)
             
             s.show(0)
 

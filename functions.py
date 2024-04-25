@@ -11,6 +11,7 @@ SCORE = 0
 # Added by Mikael
 def music():
     stdaudio.playFile("Mainmenu")
+    stdaudio.playFile("Megalovania")
 
 # Added by Mikael
 def pew():
@@ -20,7 +21,7 @@ def pew():
 # Added by Josh
 # Initialises the canvas
 def setCanvas():
-    s.setCanvasSize(500,500)
+    s.setCanvasSize(950,600)
     s.setXscale(-250,250)
     s.setYscale(0,500)
     s.setFontSize(16)
@@ -66,7 +67,7 @@ def populateENEMIES(ENEMIES):
     y = 450
     for i in range(3):
         x = -100
-        for j in range(5):
+        for j in range(7):
             ENEMIES.append(Enemies(x,y,1))
             x += 50
         y -= 50
@@ -134,13 +135,14 @@ def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
     global ENEMY_LAST_FIRED
 
     for i in range(0, len(ENEMIES)):
-        if (abs(playerx - ENEMIES[i]._x) < 25) \
-            and ENEMIES[i]._hitpoints != 0 \
-            and ((i < 5 and ENEMIES[i+5]._hitpoints == 0 and ENEMIES[i+10]._hitpoints == 0) \
-                or (i >= 5 and i < 10 and (ENEMIES[i+5]._hitpoints == 0)) \
-                or (i >= 10)) \
-            and (time.time() - ENEMY_LAST_FIRED > 1.5):
+        player_below_enemy = abs(playerx - ENEMIES[i]._x) < 25
+        no_other_enemy_below = (i < 5 and ENEMIES[i+5]._hitpoints == 0 and ENEMIES[i+10]._hitpoints == 0) \
+                                    or (i >= 5 and i < 10 and (ENEMIES[i+5]._hitpoints == 0)) \
+                                    or (i >= 10)
+        enemy_alive = ENEMIES[i]._hitpoints != 0
+        recharge_time_elapsed = time.time() - ENEMY_LAST_FIRED > 1.5
 
+        if player_below_enemy and enemy_alive and no_other_enemy_below and recharge_time_elapsed:
             ENEMY_MISSILES.append(Missiles(ENEMIES[i]._x, ENEMIES[i]._y, 0, 1))
             ENEMY_LAST_FIRED = time.time()
 
@@ -160,11 +162,11 @@ def gameStatus(ENEMIES, player, ENEMY_MISSILES):
         return 'WON'
     
     for i in ENEMIES:
-        if math.sqrt((player._x-i._x)**2 + (player._y-i._y)**2) <= 50:
+        if math.sqrt((player._x-i._x)**2 + (player._y-i._y)**2) <= 40:
             return 'LOST'
         
     for j in ENEMY_MISSILES:
-        if math.sqrt((player._x-j._x)**2+(player._y-j._y)**2) <= 35:
+        if math.sqrt((player._x-j._x)**2+(player._y-j._y)**2) <= 20:
             return 'LOST'
 
 
