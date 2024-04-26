@@ -5,6 +5,7 @@ import math, time
 from picture import Picture
 from gameObjects import Enemies, Missiles, Player
 from threading import Thread
+import winsound
 
 
 BACKGROUND = Picture("background.PNG")
@@ -19,8 +20,8 @@ def main():
     overall = True
     PLAYER_GRAPHIC = Picture("player1.PNG")
 
-    #music_thread = Thread(target=f.music,daemon=True)
-    #music_thread.start()
+    music_thread = Thread(target=f.music,daemon=True)
+    music_thread.start()
 
     while overall:
         menu = True
@@ -75,9 +76,14 @@ def main():
                 player.moveCannon('l')
             if key[s.K_SPACE] and (time.time() - player_last_fired > .9):
                 MISSILES.append(Missiles(player._x, player._y, player._theta, 0))
-                # pew_thread = Thread(target=f.pew)
-                # pew_thread.start()
+                pew_thread = Thread(target=winsound.PlaySound, args=("pew.wav", winsound.SND_FILENAME))
+                pew_thread.start() 
                 player_last_fired = time.time()
+            if key[s.K_q]:
+                overall = False
+                gamePlay = False
+            if key[s.K_e]:
+                gamePlay = False
 
             if twoPlayers:
                 player2.draw()
@@ -96,14 +102,9 @@ def main():
 
                 f.enemyCounterattack(player2._x, ENEMY_MISSILES, ENEMIES)
             
-            if key[s.K_q]:
-                overall = False
-                gamePlay = False
-            if key[s.K_e]:
-                gamePlay = False
 
             f.moveEverything(ENEMIES, MISSILES, ENEMY_MISSILES, BUNKERS, player)
-            f.checkForHits(ENEMIES, BUNKERS, MISSILES)
+            f.checkForHits(ENEMIES, BUNKERS, MISSILES, ENEMY_MISSILES)
             #if levelCount > 2:
             f.enemyCounterattack(player._x, ENEMY_MISSILES, ENEMIES)
 

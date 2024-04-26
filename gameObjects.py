@@ -44,7 +44,7 @@ class Missiles:
             else:
                 self._graphic = Picture("missile1_left.PNG")
         else:
-            self._graphic = Picture("missile2_down.PNG")
+            self._graphic = Picture("missile2.PNG")
 
     def move(self):
         if self._enemy == 0:
@@ -94,7 +94,7 @@ class Player:
                 self._theta = math.pi
 
     def drawCannon(self):
-        s.setPenColor(s.BLACK)
+        s.setPenColor(s.BLUE)
         s.setPenRadius(2)
         if self._theta <= math.pi/2:
             s.line(self._x, self._y, self._x-RADIUS*math.cos(self._theta), self._y+RADIUS*math.sin(self._theta))
