@@ -5,7 +5,7 @@ from picture import Picture
 from gameObjects import Enemies, Missiles, Player
 
 BACKGROUND = Picture("background.PNG")
-GAMEBACKROUND = Picture("gamebackground.PNG")
+GAMEBACKGROUND = Picture("gamebackground.PNG")
 ENEMIES = []
 MISSILES = []
 ENEMY_MISSILES = []
