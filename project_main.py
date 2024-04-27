@@ -57,7 +57,7 @@ def main():
         while gamePlay:
             key = s.getKeysPressed()
             s.clear()
-            s.picture(BACKGROUND)
+            s.picture(GAMEBACKGROUND)
             f.score(score)
             f.highscore(highscore)
             gameStatus = f.gameStatus(ENEMIES, ENEMY_MISSILES)
