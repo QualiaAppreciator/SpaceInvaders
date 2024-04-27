@@ -1,7 +1,7 @@
 import stddraw as s
 import math, time
 from gameObjects import Enemies, Missiles, Player, Bunker
-from project_main import BACKGROUND
+from project_main import BACKGROUND, GAMEBACKGROUND
 from picture import Picture
 
 ENEMY_LAST_FIRED = 0
@@ -39,7 +39,7 @@ def drawInstructions():
         Quit = s.getKeysPressed()
         if Quit[s.K_b]:
             instructions = False
-        s.picture(BACKGROUND)
+        s.picture(GAMEBACKGROUND)
         s.text(0,275,"To move left press: ' a '")
         s.text(0,260,"To move right press: ' d '")
         s.text(0,245,"To shift the cannon angle left press: ' j '")
@@ -128,12 +128,16 @@ def gameStatus(ENEMIES, ENEMY_MISSILES):
 
 # Written by Mikael and Josh
 # Displays the GAME OVER message and the most recently played game's statistics
-def gameOver(levelCount, score):
-    s.picture(BACKGROUND)
+def gameOver(levelCount, score, highscore, prevhighscore):
+    s.picture(GAMEBACKGROUND)
     s.setFontSize(16)
     s.text(0,250,"GAME OVER")
     s.text(0,235,"Final score: " + str(score))
     s.text(0,220,"Level reached: " + str(levelCount-1))
+    if highscore >= prevhighscore:
+        s.text(0,205,"High Score: " + str(highscore))
+    else:
+        s.text(0,205," New High Score: " + str(prevhighscore))
     s.show(1)
     time.sleep(3)
 
@@ -144,6 +148,28 @@ def score(score):
     s.setPenColor(s.WHITE)
     s.setFontSize(16)
     s.text(-210,490,"score = " + str(score))
+
+# Written by Nico
+# updates it the highscores accordingly
+def update_highscore(score, highscore_file, highscore):
+    file = open(highscore_file, 'r')
+    current_highscore = int(file.read())
+    file.close()
+    if score >= current_highscore:
+        file = open(highscore_file, 'w')
+        file.write(str(score))
+        file.close()
+        highscore = score
+    else:
+        highscore = current_highscore
+    return highscore
+
+#Written by Nico
+#displays previous high score
+def highscore(highscore):
+    s.setPenColor(s.WHITE)
+    s.setFontSize(16)
+    s.text(170, 490, " previous highscore = " + str(highscore))
 
 
 # Added by Josh
@@ -164,7 +190,7 @@ def levelDisplay(levelCount):
 # This function is accessed from the game menu
 def playerChoice():
     choice = True
-    s.picture(BACKGROUND)
+    s.picture(GAMEBACKGROUND)
     s.setFontSize(26)
     s.text(0,320,"Choose your character")
     s.picture(Picture('player1.PNG'),-50, 250)
