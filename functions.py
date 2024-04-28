@@ -291,4 +291,19 @@ def gameOver(levelCount):
         s.setPenColor(s.WHITE)
         s.text(30,290,str(SCORE))
         s.text(30,240,str(levelCount-1))
+def gameOver(levelCount):
+    display_gameover = True
+
+    while display_gameover:
+        s.clear()
+
+        quit = s.getKeysPressed()
+        if quit[s.K_r]:
+            display_gameover = False
+
+        s.picture(Picture("GameOver.PNG"))
+        s.setFontSize(35)
+        s.setPenColor(s.WHITE)
+        s.text(30,290,str(SCORE))
+        s.text(30,240,str(levelCount-1))
         s.show(1)
