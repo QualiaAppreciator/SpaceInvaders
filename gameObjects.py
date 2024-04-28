@@ -5,7 +5,7 @@ from picture import Picture
 
 
 
-
+# Added by Josh
 class Enemies:
     def __init__(self, x, y, hitpoints, speed): 
         self._x = x
@@ -27,6 +27,7 @@ class Enemies:
 
 
 
+# Added by Josh
 # Contains both player and enemy missiles
 class Missiles:
     def __init__(self, x, y, theta, enemy):
@@ -36,6 +37,8 @@ class Missiles:
         self._speed = 2.5
         self._enemy = enemy
 
+        # Added by Mikael
+        # Tilts missile graphic
         if self._enemy == 0:
             if self._theta >= 2*math.pi/5 and self._theta <= 3*math.pi/5:
                 self._graphic = Picture("missile1.PNG")
@@ -135,8 +138,3 @@ class Bunker:
                 return
             if self._hitpoints <= 6:
                 s.picture(Picture("bunker1.PNG"), self._x, self._y)
-
-def main():
-    pass
-
-if __name__ == '__main__': main()

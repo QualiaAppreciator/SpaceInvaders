@@ -2,7 +2,7 @@ import stddraw as s
 import functions as f
 import math, time
 from picture import Picture
-from gameObjects import Enemies, Missiles, Player
+from gameObjects import Missiles, Player
 from threading import Thread
 import winsound
 
@@ -16,7 +16,8 @@ BUNKERS = []
 ###################
 
 
-
+# Main was mainly written by Mikael and Josh, cleaned up and commented by Mikael
+# Very hard to keep track of who wrote which line
 def main():
     overall = True
     f.setCanvas()
