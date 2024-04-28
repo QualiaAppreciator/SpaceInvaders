@@ -140,7 +140,7 @@ def main():
                 ENEMY_MISSILES.clear()
                 BUNKERS.clear()
 
-                if levelCount > 3:
+                if levelCount > 4:
                     f.ENEMY_HITPOINTS += 1
                 if levelCount > 4:
                     f.ENEMY_SPEED += 0.5
@@ -170,6 +170,8 @@ def main():
                     player2.moveCannon('right')
                 if key[s.K_RCTRL] and (time.time() - player2_last_fired > .9) and player2._hitpoints > 0:
                     MISSILES.append(Missiles(player2._x, player2._y, player2._theta, 0))
+                    pew2_thread = Thread(target=winsound.PlaySound, args=("pew.wav", winsound.SND_FILENAME))
+                    pew2_thread.start() 
                     player2_last_fired = time.time()
                 ############################################
 

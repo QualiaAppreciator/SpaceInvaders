@@ -225,9 +225,9 @@ def checkIfPlayerHit(player, ENEMY_MISSILES, ENEMIES):
             player._hitpoints -= 1
             ENEMY_MISSILES.remove(i)
     for j in ENEMIES:
-        if math.sqrt((player._x-j._x)**2 + (player._y-j._y)**2) <= 30:
+        if (math.sqrt((player._x-j._x)**2 + (player._y-j._y)**2) <= 30) and j._hitpoints != 0:
             player._hitpoints = 0
-    return player._hitpoints
+
 
 
 
@@ -244,14 +244,6 @@ def gameStatus(ENEMIES, ENEMY_MISSILES, player):
             living_enemies += 1
     if living_enemies == 0:
         return 'WON'
-    
-    for i in ENEMIES:
-        if math.sqrt((player._x-i._x)**2 + (player._y-i._y)**2) <= 40:
-            return 'LOST'
-        
-    for j in ENEMY_MISSILES:
-        if math.sqrt((player._x-j._x)**2+(player._y-j._y)**2) <= 20:
-            return 'LOST'
 
 
 
