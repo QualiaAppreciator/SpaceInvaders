@@ -94,11 +94,11 @@ class Player:
 
 
     def moveCannon(self, key):
-        if key == 'j':
+        if key == 'left':
             self._theta -= 0.03
             if self._theta <= 0:
                 self._theta = 0
-        if key == 'l':
+        if key == 'right':
             self._theta += 0.03
             if self._theta >= math.pi:
                 self._theta = math.pi
