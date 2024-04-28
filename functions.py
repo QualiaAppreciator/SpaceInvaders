@@ -84,25 +84,6 @@ def populateBUNKERS(BUNKERS):
     BUNKERS.append(Bunker(140,170,4))
 
 
-
-# Moved by Mikael
-# Moved from main for modularity
-def moveEverything(ENEMIES, MISSILES, ENEMY_MISSILES, BUNKERS, player):
-    for k in ENEMIES:
-        k.draw()
-        k.move()
-    for j in MISSILES:
-        j.draw()
-        j.move()
-    for g in ENEMY_MISSILES:
-        g.draw()
-        g.move()
-    for p in BUNKERS:
-        p.draw()
-    player.draw()
-    player.drawCannon()    
-
-
 # Written by Mikael and Josh
 # Checks if any of the Missiles fired by the player is touching an enemy,
 # if it is, lowers that enemy's hitpoints by 1 and removes the Missile object from MISSILES
@@ -112,7 +93,7 @@ def checkForHits(ENEMIES, BUNKERS, MISSILES, ENEMY_MISSILES):
 
     for i in ENEMIES:
         for j in MISSILES:
-            if (math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) <= 23) and i._hitpoints != 0:
+            if (math.sqrt((i._x-j._x)**2+(i._y-j._y)**2) <= 18) and i._hitpoints != 0:
                 i._hitpoints -= 1
                 MISSILES.remove(j)
                 SCORE += 10
@@ -135,15 +116,16 @@ def checkForHits(ENEMIES, BUNKERS, MISSILES, ENEMY_MISSILES):
         if i._x < -250 or i._x > 250 or i._y > 500:
             MISSILES.remove(i)
 
+    return highscore
+
 
 # Written by Mikael
 # Enemy fires Missile if the enemy is above the player,
 # it is alive,
 # there isn't an enemy below it,
 # and the recharge time has elapsed
-def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
+def enemyCounterattack(player, ENEMY_MISSILES, ENEMIES):
     global ENEMY_LAST_FIRED
-
     for i in range(0, len(ENEMIES)):
         player_below_enemy = abs(playerx - ENEMIES[i]._x) < 22
         no_other_enemy_below = (i < 7 and ENEMIES[i+7]._hitpoints == 0 and ENEMIES[i+14]._hitpoints == 0) \
@@ -155,8 +137,6 @@ def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
         if player_below_enemy and enemy_alive and no_other_enemy_below and recharge_time_elapsed:
             ENEMY_MISSILES.append(Missiles(ENEMIES[i]._x, ENEMIES[i]._y, 0, 1))
             ENEMY_LAST_FIRED = time.time()
-            enemy_pew_thread = Thread(target=winsound.PlaySound, args=("enemy_pew.wav", winsound.SND_FILENAME))
-            enemy_pew_thread.start()
 
 
 
@@ -165,7 +145,7 @@ def enemyCounterattack(playerx, ENEMY_MISSILES, ENEMIES):
 # Returns 'LOST' if an enemy missile or an enemy touches the player,
 # or an enemy touches the bottom border
 # Returns 'WON' if all enemies are dead
-def gameStatus(ENEMIES, player, ENEMY_MISSILES):
+def gameStatus(ENEMIES, ENEMY_MISSILES):
     living_enemies = 0
     for g in ENEMIES:
         if g._hitpoints != 0:
@@ -214,3 +194,36 @@ def levelDisplay(levelCount):
         s.text(0,250,"LEVEL " + str(levelCount))
         s.show(1)
     return levelCount + 1
+
+
+# Written by Josh
+# Displays a character choice menu and allows the player to choose a graphic as their character
+# This function is accessed from the game menu
+def playerChoice():
+    choice = True
+    s.picture(BACKGROUND)
+    s.setFontSize(26)
+    s.text(0,320,"Choose your character")
+    s.picture(Picture('player1.PNG'),-50, 250)
+    s.picture(Picture('player2.PNG'),50, 250)
+    s.setFontSize(20)
+    s.text(-50, 200, "1")
+    s.text(50, 200, "2")
+
+    while choice:
+        key = s.getKeysPressed()
+        s.show(1)
+        if key[s.K_1]:
+            return Picture('player1.PNG')
+        if key[s.K_2]:
+            return Picture('player2.PNG')
+
+def checkIfPlayerHit(player, ENEMY_MISSILES, ENEMIES):
+    for i in ENEMY_MISSILES:
+        if math.sqrt((player._x-i._x)**2+(player._y-i._y)**2) <= 35:
+            player._hitpoints -= 1
+            ENEMY_MISSILES.remove(i)
+    for j in ENEMIES:
+        if math.sqrt((player._x-j._x)**2 + (player._y-j._y)**2) <= 50:
+            player._hitpoints = 0
+    return player._hitpoints
