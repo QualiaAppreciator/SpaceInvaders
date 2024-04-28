@@ -62,6 +62,7 @@ def main():
             if key[s.K_c]:
                 playerGraphic = f.playerChoice()
             if key[s.K_m]:
+                highscore = f.update_highscore('highscore_file.txt', 0)
                 multiplayer = True
                 menu = False
         ###################################
