@@ -102,7 +102,6 @@ def levelDisplay(levelCount):
     s.setFontSize(30)
     s.setPenColor(s.WHITE)
     while time.time() - currentTime <= 2:
-        stdaudio.playFile('levelup')
         s.text(0,250,"LEVEL " + str(levelCount))
         s.show(1)
     return levelCount + 1
@@ -276,7 +275,7 @@ def update_highscore(highscore_file, highscore):
 
 # Written by Mikael and Josh
 # Displays the GAME OVER message and the most recently played game's statistics
-def gameOver(levelCount):
+def gameOver(levelCount, highscore, prevhighscore):
     display_gameover = True
 
     while display_gameover:
@@ -291,19 +290,3 @@ def gameOver(levelCount):
         s.setPenColor(s.WHITE)
         s.text(30,290,str(SCORE))
         s.text(30,240,str(levelCount-1))
-def gameOver(levelCount):
-    display_gameover = True
-
-    while display_gameover:
-        s.clear()
-
-        quit = s.getKeysPressed()
-        if quit[s.K_r]:
-            display_gameover = False
-
-        s.picture(Picture("GameOver.PNG"))
-        s.setFontSize(35)
-        s.setPenColor(s.WHITE)
-        s.text(30,290,str(SCORE))
-        s.text(30,240,str(levelCount-1))
-        s.show(1)
