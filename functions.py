@@ -290,3 +290,5 @@ def gameOver(levelCount, highscore, prevhighscore):
         s.setPenColor(s.WHITE)
         s.text(30,290,str(SCORE))
         s.text(30,240,str(levelCount-1))
+        s.text(30,180,str(highscore))
+        s.show(1)

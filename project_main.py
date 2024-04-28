@@ -62,6 +62,7 @@ def main():
             if key[s.K_c]:
                 playerGraphic = f.playerChoice()
             if key[s.K_m]:
+                highscore = f.update_highscore('highscore_file.txt', 0)
                 multiplayer = True
                 menu = False
         ###################################
@@ -99,10 +100,10 @@ def main():
             if key[s.K_d]:
                 player.move('right')
             if key[s.K_4]:
-                player.moveCannon('j')
+                player.moveCannon('left')
             if key[s.K_6]:
-                player.moveCannon('l')
-            if key[s.K_SPACE] and (time.time() - player_last_fired > .9):
+                player.moveCannon('right')
+            if key[s.K_SPACE] and (time.time() - player_last_fired > .9) and player._hitpoints > 0:
                 MISSILES.append(Missiles(player._x, player._y, player._theta, 0))
                 pew_thread = Thread(target=winsound.PlaySound, args=("pew.wav", winsound.SND_FILENAME))
                 pew_thread.start() 
